@@ -1,4 +1,4 @@
-import { Type } from "./type.js";
+import { Type } from "./type.mjs";
 
 /**
  * @typedef {Object} StringFieldSchema
@@ -70,6 +70,9 @@ export function string(options = {}) {
     } = options;
 
     // ── schema definition validation ──
+    if (defaultValue !== undefined && typeof defaultValue !== "string") {
+        throw new Error("string(): default must be a string");
+    }
 
     if (lowercase && uppercase) {
         throw new Error("string(): cannot use both lowercase and uppercase");

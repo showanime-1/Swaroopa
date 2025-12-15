@@ -1,4 +1,4 @@
-import { Type } from "./type.js";
+import { Type } from "./type.mjs";
 
 /**
  * @typedef {Object} NumberFieldSchema
@@ -55,6 +55,9 @@ export function number(options = {}) {
     } = options;
 
     // ── schema definition validation ──
+    if (defaultValue !== undefined && typeof defaultValue !== "number") {
+        throw new Error("number(): default must be a number");
+    }
 
     if (positive && negative) {
         throw new Error("number(): cannot be both positive and negative");
