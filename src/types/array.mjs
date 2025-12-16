@@ -1,3 +1,7 @@
+import { isSwaroopa } from "../checks/swaroopa.mjs";
+import { Type } from "./type.mjs";
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
+
 /**
  * @typedef {Object} ArraySwaroopaField
  * @property {"array"} type
@@ -7,8 +11,6 @@
  * @property {number | undefined} maxLength
  * @property {string | undefined} description
  */
-
-import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
  * Defines an array field schema.
@@ -34,6 +36,10 @@ export function array(of, options = {}) {
         throw new Error("array(): element schema is required");
     }
 
+    if (!Object.values(Type).includes(of)) {
+        throw new Error(`array(): allowed of values are (${Object.values(Type).join(", ")})`);
+    }
+
     return {
         [SWAROOPA_FIELD_BRAND]: true,
         type: Type.Array,
@@ -43,4 +49,54 @@ export function array(of, options = {}) {
         maxLength,
         description
     };
+}
+
+/**
+ * Validates and normalizes a array value based on a Swaroopa array schema.
+ * @template T
+ * 
+ * @param {ArraySwaroopaField} options
+ * @param {T[] | undefined} value
+ *
+ * @returns {T[] | undefined}
+ *
+ * @throws {Error}
+ * Throws if the value violates the schema constraints.
+ */
+function createNew(options, value) {
+    if (arguments.length === 1) {
+        if (options.required) {
+            return []
+        }
+
+        return undefined
+    }
+
+    if (!Array.isArray(value)) {
+        throw new Error("array(): value must be an array");
+    }
+
+    if (options.of === Type.Swaroopa) {
+        if (value.some(v => !isSwaroopa(v))) {
+            throw new Error(`array(): must only contain type ${options.of}`);
+        }
+    } else {
+        if (value.some(v => typeof v !== options.of)) {
+            throw new Error(`array(): must only contain type ${options.of}`);
+        }
+    }
+
+    if (options.minLength && value.length < options.minLength) {
+        throw new Error(
+            `array(): minimum length is ${options.minLength}`
+        );
+    }
+
+    if (options.maxLength && value.length > options.maxLength) {
+        throw new Error(
+            `array(): maximum length is ${options.maxLength}`
+        );
+    }
+
+    return value
 }

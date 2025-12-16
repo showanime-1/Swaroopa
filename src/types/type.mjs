@@ -21,6 +21,8 @@ export const Type = Object.freeze({
 
     // Functions (usually forbidden, but explicit)
     Function: "function",
+    
+    Swaroopa: "swaroopa",
 
     // Mongo / identifiers
     ObjectId: "objectId",

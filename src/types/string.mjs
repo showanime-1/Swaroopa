@@ -85,8 +85,12 @@ export function string(options = {}) {
     } = options;
 
     // ── schema definition validation ──
-    if (defaultValue !== undefined && typeof defaultValue !== "string") {
+    if (defaultValue !== undefined && typeof defaultValue !== Type.String) {
         throw new Error("string(): default must be a string");
+    }
+
+    if (required && typeof defaultValue === Type.String) {
+        throw new Error("string(): required and default can not be used together ");
     }
 
     if (lowercase && uppercase) {
@@ -148,29 +152,24 @@ export function string(options = {}) {
  * Throws if the value violates the schema constraints.
  */
 function createNew(options, value) {
-    if (value === undefined) {
-        if (options.required) {
-            return options.default;
-        }
-        return options.default;
+    if (arguments.length === 1) {
+        if (options.required) throw new Error("string(): required field is missing");
+        if (typeof options.default === Type.String) return options.default;
+        return undefined
     }
 
-    if (typeof value !== "string") {
+    if (typeof value !== Type.String) {
         throw new Error("string(): value must be a string");
     }
 
     let result = value;
 
-    if (options.trim) {
-        result = result.trim();
+    if (options.lowercase && /[A-Z]/.test(value)) {
+        throw new Error("string(): all characters must be lower case");
     }
 
-    if (options.lowercase) {
-        result = result.toLowerCase();
-    }
-
-    if (options.uppercase) {
-        result = result.toUpperCase();
+    if (options.uppercase && /[a-z]/.test(value)) {
+        throw new Error("string(): all characters must be upper case");
     }
 
     if (options.minLength != null && result.length < options.minLength) {

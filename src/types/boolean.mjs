@@ -35,7 +35,7 @@ export function boolean(options = {}) {
         description
     } = options;
 
-    if (defaultValue !== undefined && typeof defaultValue !== "boolean") {
+    if (defaultValue !== undefined && typeof defaultValue !== Type.Boolean) {
         throw new Error("boolean(): default must be a boolean");
     }
 
@@ -46,4 +46,29 @@ export function boolean(options = {}) {
         default: defaultValue,
         description
     };
+}
+
+/**
+ * Validates and normalizes a boolean value based on a Swaroopa boolean schema.
+ *
+ * @param {BooleanSwaroopaField} options
+ * @param {boolean | undefined} value
+ *
+ * @returns {boolean | undefined}
+ *
+ * @throws {Error}
+ * Throws if the value violates the schema constraints.
+ */
+function createNew(options, value) {
+    if (arguments.length === 1) {
+        if (options.required) throw new Error("boolean(): required field is missing");
+        if (typeof options.default === Type.Boolean) return options.default;
+        return undefined
+    }
+
+    if (typeof value !== Type.Boolean) {
+        throw new Error("boolean(): value must be a boolean");
+    }
+
+    return value;
 }

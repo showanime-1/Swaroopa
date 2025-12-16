@@ -1,16 +1,4 @@
-/**
- * Checks whether a value is a Swaroopa swaroopa field.
- *
- * @param {unknown} value
- * @returns {boolean}
- */
-export function isSwaroopaFiels(value) {
-    return (
-        typeof value === "object" &&
-        value !== null &&
-        value[SWAROOPA_FIELD_BRAND] === true
-    );
-}
+import { isSwaroopaField } from "./checks/swaroopaField.mjs";
 
 /**
  * Creates a Swaroopa schema from field definitions.
@@ -31,7 +19,7 @@ export function Swaroopa(structure) {
     }
 
     for (const [key, value] of Object.entries(structure)) {
-        if (!isFieldSchema(value)) {
+        if (!isSwaroopaField(value)) {
             throw new Error(
                 `Swaroopa(): field "${key}" is not a valid field schema`
             );

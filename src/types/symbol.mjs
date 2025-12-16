@@ -1,3 +1,6 @@
+import { Type } from "./type.mjs";
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
+
 /**
  * @typedef {Object} SymbolSwaroopaField
  * @property {"symbol"} type
@@ -5,8 +8,6 @@
  * @property {symbol | undefined} default
  * @property {string | undefined} description
  */
-
-import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
  * Defines a symbol field schema for Swaroopa.
@@ -36,4 +37,36 @@ export function symbol(options = {}) {
         default: defaultValue,
         description
     };
+}
+
+
+/**
+ * Validates and normalizes a symbol value based on a Swaroopa symbol schema.
+ *
+ * @param {SymbolSwaroopaField} options
+ * @param {symbol | undefined} value
+ *
+ * @returns {symbol | undefined}
+ *
+ * @throws {Error}
+ * Throws if the value violates the schema constraints.
+ */
+function createNew(options, value) {
+    if (arguments.length === 1 || value === undefined) {
+        if (options.required) {
+            throw new Error("symbol(): required field is missing");
+        }
+
+        if (options.default !== undefined) {
+            return options.default;
+        }
+
+        return undefined;
+    }
+
+    if (typeof value !== "symbol") {
+        throw new Error("symbol(): value must be a symbol");
+    }
+
+    return value;
 }
