@@ -1,11 +1,13 @@
 /**
- * @typedef {Object} ObjectFieldSchema
+ * @typedef {Object} ObjectSwaroopaField
  * @property {"object"} type
  * @property {Object<string, any>} shape
  * @property {boolean} required
  * @property {boolean} strict
  * @property {string | undefined} description
  */
+
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
  * Defines an object field schema.
@@ -16,7 +18,7 @@
  * @param {boolean} [options.strict=true]
  * @param {string} [options.description]
  *
- * @returns {ObjectFieldSchema}
+ * @returns {ObjectSwaroopaField}
  */
 export function object(shape, options = {}) {
     const {
@@ -30,6 +32,7 @@ export function object(shape, options = {}) {
     }
 
     return {
+        [SWAROOPA_FIELD_BRAND]: true,
         type: Type.Object,
         shape,
         required,

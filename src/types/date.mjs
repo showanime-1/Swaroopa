@@ -1,10 +1,12 @@
 /**
- * @typedef {Object} DateFieldSchema
+ * @typedef {Object} DateSwaroopaField
  * @property {"date"} type
  * @property {boolean} required
  * @property {Date | undefined} default
  * @property {string | undefined} description
  */
+
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
  * Defines a date field schema.
@@ -14,7 +16,7 @@
  * @param {Date} [options.default]
  * @param {string} [options.description]
  *
- * @returns {DateFieldSchema}
+ * @returns {DateSwaroopaField}
  */
 export function date(options = {}) {
     const {
@@ -28,6 +30,7 @@ export function date(options = {}) {
     }
 
     return {
+        [SWAROOPA_FIELD_BRAND]: true,
         type: Type.Date,
         required,
         default: defaultValue,

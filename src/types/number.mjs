@@ -1,7 +1,8 @@
 import { Type } from "./type.mjs";
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
- * @typedef {Object} NumberFieldSchema
+ * @typedef {Object} NumberSwaroopaField
  * @property {"number"} type - Literal type identifier
  * @property {boolean} required - Whether the field is required
  * @property {number | undefined} default - Default value if missing
@@ -38,7 +39,7 @@ import { Type } from "./type.mjs";
  * @param {string} [options.description]
  * Human-readable description of the field.
  *
- * @returns {NumberFieldSchema} Normalized number schema definition.
+ * @returns {NumberSwaroopaField} Normalized number schema definition.
  *
  * @throws {Error}
  * Throws if schema options are invalid or conflicting.
@@ -57,10 +58,6 @@ export function number(options = {}) {
     // ── schema definition validation ──
     if (defaultValue !== undefined && typeof defaultValue !== "number") {
         throw new Error("number(): default must be a number");
-    }
-
-    if (positive && negative) {
-        throw new Error("number(): cannot be both positive and negative");
     }
 
     if (min != null && typeof min !== "number") {
@@ -84,14 +81,13 @@ export function number(options = {}) {
     }
 
     return {
+        [SWAROOPA_FIELD_BRAND]: true,
         type: Type.Number,
         required,
         default: defaultValue,
         min,
         max,
         integer,
-        positive,
-        negative,
         enum: enumValues,
         description
     };

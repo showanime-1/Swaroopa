@@ -1,7 +1,8 @@
 import { Type } from "./type.mjs";
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
- * @typedef {Object} BigIntFieldSchema
+ * @typedef {Object} BigIntSwaroopaField
  * @property {"bigint"} type
  * @property {boolean} required
  * @property {bigint | undefined} default
@@ -16,7 +17,7 @@ import { Type } from "./type.mjs";
  * @param {bigint} [options.default]
  * @param {string} [options.description]
  *
- * @returns {BigIntFieldSchema}
+ * @returns {BigIntSwaroopaField}
  */
 export function bigint(options = {}) {
     const {
@@ -30,6 +31,7 @@ export function bigint(options = {}) {
     }
 
     return {
+        [SWAROOPA_FIELD_BRAND]: true,
         type: Type.BigInt,
         required,
         default: defaultValue,

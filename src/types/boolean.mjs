@@ -1,7 +1,8 @@
 import { Type } from "./type.mjs";
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
- * @typedef {Object} BooleanFieldSchema
+ * @typedef {Object} BooleanSwaroopaField
  * @property {"boolean"} type - Literal type identifier
  * @property {boolean} required - Whether the field is required
  * @property {boolean | undefined} default - Default value if missing
@@ -22,7 +23,7 @@ import { Type } from "./type.mjs";
  * @param {string} [options.description]
  * Human-readable description of the field.
  *
- * @returns {BooleanFieldSchema} Normalized number schema definition.
+ * @returns {BooleanSwaroopaField} Normalized number schema definition.
  *
  * @throws {Error}
  * Throws if schema options are invalid or conflicting.
@@ -39,6 +40,7 @@ export function boolean(options = {}) {
     }
 
     return {
+        [SWAROOPA_FIELD_BRAND]: true,
         type: Type.boolean,
         required,
         default: defaultValue,

@@ -1,10 +1,12 @@
 /**
- * @typedef {Object} SymbolFieldSchema
+ * @typedef {Object} SymbolSwaroopaField
  * @property {"symbol"} type
  * @property {boolean} required
  * @property {symbol | undefined} default
  * @property {string | undefined} description
  */
+
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
  * Defines a symbol field schema for Swaroopa.
@@ -14,7 +16,7 @@
  * @param {symbol} [options.default]
  * @param {string} [options.description]
  *
- * @returns {SymbolFieldSchema}
+ * @returns {SymbolSwaroopaField}
  */
 export function symbol(options = {}) {
     const {
@@ -28,6 +30,7 @@ export function symbol(options = {}) {
     }
 
     return {
+        [SWAROOPA_FIELD_BRAND]: true,
         type: Type.Symbol,
         required,
         default: defaultValue,

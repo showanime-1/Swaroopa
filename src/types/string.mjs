@@ -1,7 +1,22 @@
 import { Type } from "./type.mjs";
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
- * @typedef {Object} StringFieldSchema
+ * @typedef {Object} StringSwaroopaOptions
+ * @property {boolean} required
+ * @property {string | undefined} default
+ * @property {number | undefined} minLength
+ * @property {number | undefined} maxLength
+ * @property {boolean} trim
+ * @property {boolean} lowercase
+ * @property {boolean} uppercase
+ * @property {RegExp | undefined} pattern
+ * @property {string[] | undefined} enum
+ * @property {string | undefined} description
+ */
+
+/**
+ * @typedef {Object} StringSwaroopaField
  * @property {"string"} type
  * @property {boolean} required
  * @property {string | undefined} default
@@ -51,7 +66,7 @@ import { Type } from "./type.mjs";
  * @param {string} [options.description]
  * Human-readable description of the field.
  *
- * @returns {StringFieldSchema} Normalized string schema definition.
+ * @returns {StringSwaroopaField} Normalized string schema definition.
  *
  * @throws {Error}
  * Throws if schema options are invalid or conflicting.
@@ -107,16 +122,78 @@ export function string(options = {}) {
     }
 
     return {
+        [SWAROOPA_FIELD_BRAND]: true,
         type: Type.String,
         required,
         default: defaultValue,
         minLength,
         maxLength,
-        trim,
         lowercase,
         uppercase,
         pattern,
         enum: enumValues,
         description
     };
+}
+
+/**
+ * Validates and normalizes a string value based on a Swaroopa string schema.
+ *
+ * @param {StringSwaroopaOptions} options
+ * @param {string | undefined} value
+ *
+ * @returns {string | undefined}
+ *
+ * @throws {Error}
+ * Throws if the value violates the schema constraints.
+ */
+function createNew(options, value) {
+    if (value === undefined) {
+        if (options.required) {
+            return options.default;
+        }
+        return options.default;
+    }
+
+    if (typeof value !== "string") {
+        throw new Error("string(): value must be a string");
+    }
+
+    let result = value;
+
+    if (options.trim) {
+        result = result.trim();
+    }
+
+    if (options.lowercase) {
+        result = result.toLowerCase();
+    }
+
+    if (options.uppercase) {
+        result = result.toUpperCase();
+    }
+
+    if (options.minLength != null && result.length < options.minLength) {
+        throw new Error(
+            `string(): minimum length is ${options.minLength}`
+        );
+    }
+
+    if (options.maxLength != null && result.length > options.maxLength) {
+        throw new Error(
+            `string(): maximum length is ${options.maxLength}`
+        );
+    }
+
+    if (options.pattern && !options.pattern.test(result)) {
+        throw new Error("string(): value does not match required pattern");
+    }
+
+    if (options.enum && !options.enum.includes(result)) {
+        throw new Error(
+            `string(): allowed values are (${options.enum.join(", ")})`
+        );
+    }
+
+    return result;
 }

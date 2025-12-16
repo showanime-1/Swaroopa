@@ -1,5 +1,5 @@
 /**
- * @typedef {Object} ArrayFieldSchema
+ * @typedef {Object} ArraySwaroopaField
  * @property {"array"} type
  * @property {any} of
  * @property {boolean} required
@@ -7,6 +7,8 @@
  * @property {number | undefined} maxLength
  * @property {string | undefined} description
  */
+
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
  * Defines an array field schema.
@@ -18,7 +20,7 @@
  * @param {number} [options.maxLength]
  * @param {string} [options.description]
  *
- * @returns {ArrayFieldSchema}
+ * @returns {ArraySwaroopaField}
  */
 export function array(of, options = {}) {
     const {
@@ -33,6 +35,7 @@ export function array(of, options = {}) {
     }
 
     return {
+        [SWAROOPA_FIELD_BRAND]: true,
         type: Type.Array,
         of,
         required,

@@ -1,7 +1,8 @@
 import { Type } from "./type.mjs";
+import { SWAROOPA_FIELD_BRAND } from "./types.mjs";
 
 /**
- * @typedef {Object} AnyFieldSchema
+ * @typedef {Object} AnySwaroopaField
  * @property {"any"} type
  * @property {any | undefined} default
  * @property {string | undefined} description
@@ -18,7 +19,7 @@ import { Type } from "./type.mjs";
  * @param {string} [options.description]
  * Human-readable description of the field.
  *
- * @returns {AnyFieldSchema} Normalized string schema definition.
+ * @returns {AnySwaroopaField} Normalized string schema definition.
  *
  */
 export function any(options = {}) {
@@ -28,6 +29,7 @@ export function any(options = {}) {
     } = options;
 
     return {
+        [SWAROOPA_FIELD_BRAND]: true,
         type: Type.Any,
         default: defaultValue,
         description
